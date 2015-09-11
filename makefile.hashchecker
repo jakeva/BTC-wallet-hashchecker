@@ -1,22 +1,16 @@
 CXX=llvm-g++
 DEPSDIR=/usr/local
-DB4DIR=/usr/local/opt/berkeley-db4
 OPENSSLDIR=/usr/local/opt/openssl
 
 INCLUDEPATHS= \
  -I"$(CURDIR)" \
  -I"$(CURDIR)/obj" \
  -I"$(DEPSDIR)/include" \
- -I"$(DB4DIR)/include" \
  -I"$(OPENSSLDIR)/include"
 
 LIBPATHS= \
  -L"$(DEPSDIR)/lib" \
- -L"$(DB4DIR)/lib" \
  -L"$(OPENSSLDIR)/lib"
-
-USE_UPNP:=1
-USE_IPV6:=1
 
 LIBS= -dead_strip
 
@@ -25,7 +19,6 @@ TESTDEFS = -DTEST_DATA_DIR=$(abspath test/data)
 TESTLIBS += \
  -lboost_unit_test_framework-mt
 LIBS += \
- -ldb_cxx-4.8 \
  -lboost_system-mt \
  -lboost_filesystem-mt \
  -lboost_program_options-mt \
@@ -83,22 +76,6 @@ OBJS= \
     obj/leveldb.o \
     obj/txdb.o
 
-ifndef USE_UPNP
-	override USE_UPNP = -
-endif
-ifneq (${USE_UPNP}, -)
-	DEFS += -DUSE_UPNP=$(USE_UPNP)
-ifdef STATIC
-	LIBS += $(DEPSDIR)/lib/libminiupnpc.a
-else
-	LIBS += -lminiupnpc
-endif
-endif
-
-ifneq (${USE_IPV6}, -)
-	DEFS += -DUSE_IPV6=$(USE_IPV6)
-endif
-
 all:hashchecker
 
 test check: test_bitcoin FORCE
@@ -142,7 +119,7 @@ clean:
 	-rm -f obj/*.P
 	-rm -f obj-test/*.P
 	-rm -f obj/build.h
-	-cd leveldb && $(MAKE) clean || true
+	-rm -f hashchecker
 
 FORCE:
 
