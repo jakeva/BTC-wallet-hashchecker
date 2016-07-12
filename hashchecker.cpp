@@ -68,7 +68,7 @@ inline double Factorial(int x) {
 int main(int argc, char* argv[])
 {
   if (argc != 7){
-    printf("Hashchecker needs to know the crypto details of your wallet!\nUsage: hashchecker pw_to_permute iterations salt crypted_key public_key crypted_secret\n");
+    printf("Hashchecker needs to know the cryptographic details of your wallet!\nUsage: hashchecker pw_to_permute iterations salt crypted_key public_key crypted_secret\n");
     return 1;
   }
   CCrypter crypter;
